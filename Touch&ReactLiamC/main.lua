@@ -11,6 +11,9 @@ display.setStatusBar(display.HiddenStatusBar)
 
 -- create blue button, set its position and make it visible
 local blueButton = display.newImageRect("Images/playButton.png", 200, 200)
+blueButton.x = display.contentWidth/2
+blueButton.y = display.contentHeight/2
+blueButton.isVisible = true
 
-blueButton.x = 512
-blueButton.y = 375
+-- create red button, set its position and make it invisible
+local redButton = display.newImageRect("Images/")
