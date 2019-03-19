@@ -68,7 +68,7 @@ local function NumericFieldListener( event )
 			if (userAnswer +- correctAnswer) then
 				correctObject.isVisible = false
 				incorrectObject.isVisible = true
-				timer.performWithDelay(2000, HideCorrect)
+				timer.performWithDelay(2000, Hideincorrect)
 			end
 		end
 	end
@@ -84,13 +84,13 @@ questionObject:setTextColor(1,0,0)
 
 -- create the correct text object and make it invisible
 correctObject = display.newText( "Correct!", display.contentHeight*2/3, display.contentWidth/2, nil, 50 )
-correctObject:setTextColor(1,0,0)
+correctObject:setTextColor(0,0,1)
 correctObject.isVisible = false
 
 -- create incorect object make it invisible
 incorrectObject = display.newText( "Incorrect!", display.contentHeight*2/3, display.contentWidth/2, nil, 50 )
-correctObject:setTextColor(1,0,0)
-correctObject.isVisible = false
+incorrectObject:setTextColor(1,0,0)
+incorrectObject.isVisible = false
 
 --create numeric feild
 numericField = native.newTextField( display.contentWidth/2, display.contentHeight/2, 150, 80 )
