@@ -32,7 +32,7 @@ local rounder
 
 local function AskQuestion()
 	-- generate a random number between 1-2
-	randomOperator = math.random(4, 4)
+	randomOperator = math.random(1, 4)
 	
 	-- if the random operator is 1, then do addition
 	if (randomOperator == 1) then
