@@ -7,6 +7,9 @@
 display.setStatusBar(display.HiddenStatusBar)
 
 -- local Variables.
+local explosionSound = audio.loadSound( "Sounds/explosion.mp3" )
+local explosionSoundChannel
+
 local backgroundImage = display.newImageRect("Images/background.png", 2048, 1536)
 local purpleGirl = display.newImageRect("Images/girl2.png", 150,150)
 local purpleGirlWidth = purpleGirl.width
@@ -43,6 +46,7 @@ blueGirl.y = 275
 local function BlueGirlListener(touch)
 
 	if (touch.phase == "began") then
+		explosionSoundChannel = audio.play(explosionSound)
 		if (alreadyTouchedYellowGirl == false) then
 			alreadyTouchedPurpleGirl = true
 		end

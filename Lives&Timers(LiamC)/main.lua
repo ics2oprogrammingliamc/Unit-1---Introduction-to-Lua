@@ -1,20 +1,30 @@
--- Title: MathFun
--- Name: Your Name
+-- Title: LivesAndTimers
+-- Name: Liam Csiffary
 -- Course: ICS2O/3C
--- This program frces you to add/subtract/divide/multiply and get the correct answer
-------------------------------------------------------------------------------------------------------------
+-- This program is helping me learn how to code properly
 
--- hide status bar
 display.setStatusBar(display.HiddenStatusBar)
 
--- sets the background color
-display.setDefault("background", 0, 1, 0)
+------------------------------------------------------------------------------------
+-- VARIBALES
+--------------------------------------------------------------------------------------------
 
---------------------------------------------------------------------------------
--- LOCAL VARIABLES
---------------------------------------------------------------------------------------------------------
+-- vars for tuimers
+local totalSeconds = 10
+local secondsLeft = 10
+local clockText
+local countDownTimer
 
--- create local vars
+local lives = 3
+local heart1
+local heart2
+local heart
+
+
+local incorrectObject
+local scoreObject
+local score = 0
+
 local questionObject
 local correctObject
 local numericFields
@@ -26,9 +36,41 @@ local incorrectObject
 local randomOperator
 local rounder
 
------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
-------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+local function UpdateTime()
+
+	-- decrement the number of seconds
+	secondsLeft = secondsLeft - 1
+	
+	-- display the number of seconds left in the clock object
+	clockText.text = secondsLeft .. ""
+
+	if (secondsLeft == 0 ) then
+		-- reset the number of seconds left
+		secondsLeft = totalSeconds
+		lives = lives - 1
+
+		-- if no lives play sound and show losing image then cancel timer by making it invisible
+		if (lives == 2) then
+			heart3.isVisible = false
+		elseif (lives == 1) then
+			heart2.isVisible = false
+			heart3.isVisible  =false
+		elseif (lives == 0) then
+			heart1.isVisible = false
+			heart2.isVisible = false
+			heart3.isVisible = false
+		elseif (lives < 0) then
+			heart1.isVisible = false
+			heart2.isVisible = false
+			heart3.isVisible = false
+		end
+	end
+
+end
 
 local function AskQuestion()
 	-- generate a random number between 1-2
@@ -106,11 +148,20 @@ local function NumericFieldListener( event )
 
 		-- if the users answer and the correct answer are the same:
 		if (userAnswer == correctAnswer) then
+			-- reset total seconds left
+			secondsLeft = totalSeconds
+			-- give points for correct answer
+			score = score + 1
+			print(score)
+			scoreObject = display.newText("" .. score .. "", display.contentHeight*3/7, display.contentWidth*1/9, nil, 50 )
+
+			-- set visibles and invisibles
 			correctObject.isVisible = true
 			incorrectObject.isVisible = false
 			timer.performWithDelay(2000, HideCorrect)
 		elseif event.phase == "submitted" then
 			if (userAnswer +- correctAnswer) then
+				lives = lives - 1
 				correctObject.isVisible = false
 				incorrectObject.isVisible = true
 				timer.performWithDelay(2000, Hideincorrect)
@@ -118,10 +169,18 @@ local function NumericFieldListener( event )
 		end
 	end
 end
+	
 
----------------------------------------------------------------------------------------------------
+
+-- function that calls timer
+local function StartTimer()
+	-- create countdown timer that loops infinetely
+	countDownTimer = timer.performWithDelay( 1000, UpdateTime, 0)
+end
+
+----------------------------------------------------------------------------------
 -- OBJECT CREATION
--------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------
 
 -- displays a qu3estion and sets the color 
 questionObject = display.newText( "", display.contentWidth/3, display.contentHeight/2, nil, 50 )
@@ -144,9 +203,24 @@ numericField.inputType = "number"
 -- add the event listener fr the numeric field
 numericField:addEventListener( "userInput", NumericFieldListener)
 
---------------------------------------------------------------
--- FUNCTION CALLS
----------------------------------------------------------------------------
+heart3 = display.newImageRect("Images/heart.png", 100, 100)
+heart3.x = display.contentWidth * 5 / 8
+heart3.y = display.contentHeight * 1 / 7
 
--- call the function to ask the question
+heart2 = display.newImageRect("Images/heart.png", 100, 100)
+heart2.x = display.contentWidth * 6 / 8
+heart2.y = display.contentHeight * 1 / 7
+
+heart1 = display.newImageRect("Images/heart.png", 100, 100)
+heart1.x = display.contentWidth * 7 / 8
+heart1.y = display.contentHeight * 1 / 7
+
+clockText = display.newText( "" .. secondsLeft .. "", display.contentHeight*1/7, display.contentWidth*1/9, nil, 50 )
+
+scoreObject = display.newText("" .. score .. "", display.contentHeight*3/7, display.contentWidth*1/9, nil, 50 )
+------------------------- ------------------------------------------------------------------
+-- FUNCTIONS
+----------------------------------------------------------------------------------------------------------------
+
+StartTimer()
 AskQuestion()
