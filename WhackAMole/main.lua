@@ -5,11 +5,27 @@
 
 display.setStatusBar(display.HiddenStatusBar)
 
+-----------------------------------------------------------------------------------
+-------------------------------------OBJECTS---------------------------
+-------------------------------------------------------------------------------------
+
 local bkg = display.newRect( -530, 0, display.contentWidth, display.contentHeight )
 
 	bkg = display.setDefault("background", 0, 1, 0)
 
 local mole = display.newImage( "Images/bee.png", 0, 0 )
+
+local missedMoles = 0
+
+local score = 0
+
+local backgroundSound
+local whackedSound = audio.playSound
+local dissapear = 1000
+local dissapearText = display.newText("disappear speed = " .. dissapear .. "", 260, 100, nil, 50)
+
+local scoreText = display.newText( "score = " .. score .. "", 120, 40, nil,50)
+scoreText:setTextColor(1, 0, 0)
 
 --setting position
 mole.x = display.contentCenterX
@@ -17,11 +33,9 @@ mole.y = display.contentCenterY
 
 mole.isVisible = false
 
-local score = 0
-
-local backgroundSound
-local whackedSound
+----------------------------------------------------------------------------------------------------------
 -------------------------------------------------FUNCTIONS--------------------------------------------
+--------------------------------------------------------------------------------------------------------
 -- this function makes the mole appear in random locations
 function PopUp( )
 
@@ -29,7 +43,7 @@ function PopUp( )
 	mole.x = math.random( 0, display.contentWidth )
 	mole.y = math.random( 0, display.contentHeight )
 	mole.isVisible = true
-	timer.performWithDelay( 900, Hide)
+	timer.performWithDelay( dissapear, Hide)
 end
 
 function BackgroundSound( )
@@ -39,7 +53,7 @@ end
 
 -- calls popo up after 3 seconds
 function PopUpDelay( )
-	timer.performWithDelay( 3000, PopUp )
+	timer.performWithDelay( 0, PopUp )
 end
 
 -- this function makes the mole invisible then calls PopUpDelay
@@ -59,21 +73,32 @@ end
 function Whacked( event )
 	-- if touch phase just started
 	if (event.phase == "began") then
+		mole.isVisible = false
 		whackedSound = audio.loadSound( "Sounds/correctSound.mp3" )
 		score = score + 1
-		print(score)
-		scoreText.text = "" .. score .. ""
+		scoreText.text = "score = " .. score .. ""
+		dissapearText.text = "disappear speed = " .. dissapear .. ""
+		print(dissapear)
+
+		if (dissapear > 500) then
+			dissapear = dissapear - 50
+			elseif (dissapear > 350) then
+			dissapear = dissapear - 25
+				elseif (dissapear > 0) then
+				dissapear = dissapear - 10
+		end
 	end
 end
 
+------------------------------------------------------------------------------------------------------
+--------------------------------------------EVENT LISTENERS------------------------------
+--------------------------------------------------------------------------------------------------------
 
--------------------------------------ONJECTS---------------------------
-scoreText = display.newText( "" .. score .. "", 90, 130, nil, 300)
-scoreText:setTextColor(1, 0, 0)
---------------------------------------------EVENT LISTENERSW------------------------------
 -- is mole == whacked call "Whacked"
 mole:addEventListener( "touch", Whacked )
 
+------------------------------------------------------------------------------------------------------
 ----------------------------START GAME--------------------------------------
+-----------------------------------------------------------------------------------------
 GameStart()
 BackgroundSound()
