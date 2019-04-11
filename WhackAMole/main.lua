@@ -23,6 +23,7 @@ local backgroundSound
 local whackedSound = audio.playSound
 local dissapear = 1000
 local dissapearText = display.newText("disappear speed = " .. dissapear .. "", 260, 100, nil, 50)
+dissapearText:setTextColor(0,0,1)
 
 local scoreText = display.newText( "score = " .. score .. "", 120, 40, nil,50)
 scoreText:setTextColor(1, 0, 0)
@@ -53,7 +54,7 @@ end
 
 -- calls popo up after 3 seconds
 function PopUpDelay( )
-	timer.performWithDelay( 0, PopUp )
+	timer.performWithDelay( 2000, PopUp )
 end
 
 -- this function makes the mole invisible then calls PopUpDelay
